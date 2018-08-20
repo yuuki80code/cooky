@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yuuki.cooky.sys.dao.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.yuuki.cooky.sys.entity.SysUser">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="USER_ID" jdbcType="BIGINT" property="userId" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="DEPT_ID" jdbcType="BIGINT" property="deptId" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="MOBILE" jdbcType="VARCHAR" property="mobile" />
+    <result column="STATUS" jdbcType="CHAR" property="status" />
+    <result column="CRATE_TIME" jdbcType="TIMESTAMP" property="crateTime" />
+    <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="LAST_LOGIN_TIME" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="SSEX" jdbcType="CHAR" property="ssex" />
+    <result column="THEME" jdbcType="VARCHAR" property="theme" />
+    <result column="AVATAR" jdbcType="VARCHAR" property="avatar" />
+    <result column="DESCRIPTION" jdbcType="VARCHAR" property="description" />
+  </resultMap>
+
+  <select id="findUserMsg" resultType="sysUser" parameterType="sysUser">
+    select u.user_id userId,u.username,u.email,u.mobile,u.status,u.crate_time crateTime,
+    u.ssex,d.dept_name deptName from sys_user u
+    left join sys_dept d on(u.dept_id = d.dept_id)
+    where 1=1
+    <if test="username != null and username != ''">
+      AND lower(u.username) = #{username}
+    </if>
+    <if test="deptId != null and deptId != ''">
+      AND d.dept_id = #{deptId}
+    </if>
+    <if test="ssex != null and ssex != ''">
+      AND u.ssex = #{ssex}
+    </if>
+    <if test="status != null and status != ''">
+      AND u.status = #{status}
+    </if>
+    order by u.user_id
+  </select>
+</mapper>
