@@ -2,6 +2,7 @@
 
 #### 项目介绍
 cooky 基于SpringBoot的前后端分离项目，可能可以借鉴一下吧
+前端地址:https://gitee.com/yuukihome/cooky_front_end
 
 #### 软件架构
 - SpringBoot 2.0
