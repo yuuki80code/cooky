@@ -13,4 +13,7 @@ public interface UserService extends IService<SysUser> {
     SysUser findByName(String userName);
 
     List<SysUser> findUserMsg(SysUser user);
+
+    void addUser(SysUser user,Long[] roles);
+
 }

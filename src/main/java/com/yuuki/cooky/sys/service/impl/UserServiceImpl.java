@@ -8,11 +8,16 @@ import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.common.util.MD5Util;
 import com.yuuki.cooky.sys.dao.SysUserMapper;
 import com.yuuki.cooky.sys.entity.SysUser;
+import com.yuuki.cooky.sys.entity.SysUserRole;
+import com.yuuki.cooky.sys.service.UserRoleService;
 import com.yuuki.cooky.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,6 +25,10 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
 
     @Autowired
     private SysUserMapper sysUserMapper;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
 
     @Override
     public ResponseVo login(String username, String password) {
@@ -53,4 +62,26 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
     public List<SysUser> findUserMsg(SysUser user) {
         return sysUserMapper.findUserMsg(user);
     }
+
+    @Transactional
+    @Override
+    public void addUser(SysUser user, Long[] roles) {
+        user.setCrateTime(new Date());
+        user.setModifyTime(new Date());
+        user.setPassword(MD5Util.encrypt(user.getUsername(),user.getPassword()));
+        this.save(user);
+        saveOrUpdateRole(user, roles);
+    }
+
+    private void saveOrUpdateRole(SysUser user,Long[] roles){
+        Arrays.stream(roles).forEach(role->{
+            SysUserRole userRole = new SysUserRole();
+            userRole.setUserId(user.getUserId());
+            userRole.setRoleId(role);
+            userRoleService.save(userRole);
+        });
+
+    }
+
+
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.annotation.Generated;
 import javax.persistence.*;
 
 @Table(name = "sys_user")
@@ -14,6 +15,7 @@ public class SysUser implements Serializable {
      */
     @Id
     @Column(name = "USER_ID")
+    @GeneratedValue(generator = "JDBC")
     private Long userId;
 
     /**

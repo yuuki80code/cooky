@@ -8,6 +8,7 @@ import com.yuuki.cooky.common.model.QueryRequest;
 import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysUser;
 import com.yuuki.cooky.sys.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user")
+@Slf4j
 public class UserController extends BaseController {
 
 
@@ -35,8 +37,13 @@ public class UserController extends BaseController {
     }
 
     @PostMapping("/add")
-    public ResponseVo addUser(SysUser user) {
-
+    public ResponseVo addUser(SysUser user,Long[] roles) {
+        if(user.getStatus().equalsIgnoreCase("true")){
+            user.setStatus("1");
+        }else{
+            user.setStatus("2");
+        }
+        userService.addUser(user,roles);
         return ResponseVo.ok("success");
     }
 
