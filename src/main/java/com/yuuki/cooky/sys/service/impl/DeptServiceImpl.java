@@ -22,6 +22,7 @@ public class DeptServiceImpl extends BaseService<SysDept> implements DeptService
             tree.setTitle(dept.getDeptName());
             tree.setParentId(dept.getParentId().intValue());
             tree.setId(dept.getDeptId().intValue());
+            tree.setExtraData(dept.getCreateTime());
             trees.add(tree);
         });
         List<Tree<SysDept>> build = TreeUtil.buildList(trees,"0");

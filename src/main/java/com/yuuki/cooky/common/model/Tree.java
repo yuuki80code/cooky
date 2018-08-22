@@ -12,7 +12,9 @@ public class Tree<T> {
 
     private String title;
 
-    private List<Tree<T>> childs = new ArrayList<>();
+    private List<Tree<T>> children = new ArrayList<>();
+
+    private Object extraData;
 
     private int parentId;
 

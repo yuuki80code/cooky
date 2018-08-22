@@ -21,7 +21,7 @@ public class TreeUtil {
             for (Tree<T> parent : nodes) {
                 String id = parent.getId()+"";
                 if (id != null && id.equals(pid)) {
-                    parent.getChilds().add(children);
+                    parent.getChildren().add(children);
                     return;
                 }
             }
@@ -30,7 +30,7 @@ public class TreeUtil {
         Tree<T> root = new Tree<>();
         root.setId(0);
         root.setParentId(0);
-        root.setChilds(topNodes);
+        root.setChildren(topNodes);
         root.setTitle("根节点");
         return root;
     }
@@ -49,7 +49,7 @@ public class TreeUtil {
             nodes.forEach(parent -> {
                 String id = parent.getId()+"";
                 if (id != null && id.equals(pid)) {
-                    parent.getChilds().add(children);
+                    parent.getChildren().add(children);
                 }
             });
         });
