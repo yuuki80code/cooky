@@ -1,6 +1,7 @@
 package com.yuuki.cooky.common.util;
 
 import com.yuuki.cooky.common.model.Tree;
+import com.yuuki.cooky.common.model.TreeTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,27 @@ public class TreeUtil {
             return null;
         }
         List<Tree<T>> topNodes = new ArrayList<>();
+        nodes.forEach(children -> {
+            String pid = children.getParentId()+"";
+            if (pid == null || idParam.equals(pid)) {
+                topNodes.add(children);
+                return;
+            }
+            nodes.forEach(parent -> {
+                String id = parent.getId()+"";
+                if (id != null && id.equals(pid)) {
+                    parent.getChildren().add(children);
+                }
+            });
+        });
+        return topNodes;
+    }
+
+    public static <T> List<TreeTable<T>> buildTreeTableList(List<TreeTable<T>> nodes, String idParam) {
+        if (nodes == null) {
+            return null;
+        }
+        List<TreeTable<T>> topNodes = new ArrayList<>();
         nodes.forEach(children -> {
             String pid = children.getParentId()+"";
             if (pid == null || idParam.equals(pid)) {
