@@ -1,14 +1,13 @@
 package com.yuuki.cooky.sys.service.impl;
 
 import com.yuuki.cooky.common.model.ResponseVo;
-import com.yuuki.cooky.common.oauth2.OAuth2Token;
 import com.yuuki.cooky.common.oauth2.TokenUtil;
-import com.yuuki.cooky.common.service.IService;
 import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.common.util.MD5Util;
 import com.yuuki.cooky.sys.dao.SysUserMapper;
 import com.yuuki.cooky.sys.entity.SysUser;
 import com.yuuki.cooky.sys.entity.SysUserRole;
+import com.yuuki.cooky.sys.entity.UserWithRole;
 import com.yuuki.cooky.sys.service.UserRoleService;
 import com.yuuki.cooky.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -71,6 +71,21 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
         user.setPassword(MD5Util.encrypt(user.getUsername(),user.getPassword()));
         this.save(user);
         saveOrUpdateRole(user, roles);
+    }
+
+    @Override
+    public UserWithRole findUserWithRole(SysUser user) {
+        List<UserWithRole> userWithRole = sysUserMapper.findUserWithRole(user);
+        List<Long> roleList = new ArrayList<>();
+        for (UserWithRole uwr : userWithRole) {
+            roleList.add(uwr.getRoleId());
+        }
+        if (userWithRole.size() == 0) {
+            return null;
+        }
+        UserWithRole uwr = userWithRole.get(0);
+        uwr.setRoles(roleList);
+        return uwr;
     }
 
     private void saveOrUpdateRole(SysUser user,Long[] roles){

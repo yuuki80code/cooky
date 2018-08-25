@@ -40,4 +40,11 @@
     </if>
     order by u.user_id
   </select>
+
+  <select id="findUserWithRole" resultType="userWithRole">
+		select u.user_id userId,u.username,u.dept_id deptId,u.email,u.mobile,
+		u.status,u.ssex,ur.role_id roleId from sys_user u
+		left join sys_user_role ur on (u.user_id = ur.user_id)
+		where u.user_id = #{userId}
+  </select>
 </mapper>

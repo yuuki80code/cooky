@@ -10,10 +10,7 @@ import com.yuuki.cooky.sys.entity.SysUser;
 import com.yuuki.cooky.sys.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,8 +44,9 @@ public class UserController extends BaseController {
         return ResponseVo.ok("success");
     }
 
-    public ResponseVo getUser(SysUser user){
+    @GetMapping("/userwithrole")
+    public ResponseVo getUserWithRole(SysUser user){
 
-        return null;
+        return ResponseVo.ok(userService.findUserWithRole(user));
     }
 }
