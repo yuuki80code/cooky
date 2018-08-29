@@ -104,4 +104,10 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-
+logging:
+  level:
+    com:
+      yuuki:
+        cooky:
+          sys:
+            dao: debug

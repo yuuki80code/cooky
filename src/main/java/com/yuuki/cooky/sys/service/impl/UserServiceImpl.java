@@ -5,6 +5,7 @@ import com.yuuki.cooky.common.oauth2.TokenUtil;
 import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.common.util.MD5Util;
 import com.yuuki.cooky.sys.dao.SysUserMapper;
+import com.yuuki.cooky.sys.dao.SysUserRoleMapper;
 import com.yuuki.cooky.sys.entity.SysUser;
 import com.yuuki.cooky.sys.entity.SysUserRole;
 import com.yuuki.cooky.sys.entity.UserWithRole;
@@ -29,7 +30,8 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
     @Autowired
     private UserRoleService userRoleService;
 
-
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
     @Override
     public ResponseVo login(String username, String password) {
 
@@ -97,7 +99,7 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
         this.updateNotNull(user);
         Example example = new Example(SysUserRole.class);
         example.createCriteria().andCondition("user_id=", user.getUserId());
-        this.sysUserMapper.deleteByExample(example);
+        this.userRoleMapper.deleteByExample(example);
         saveOrUpdateRole(user, roles);
     }
 
