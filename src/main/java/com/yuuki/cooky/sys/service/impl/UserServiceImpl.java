@@ -88,6 +88,24 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
         return uwr;
     }
 
+    @Override
+    @Transactional
+    public void updateUser(SysUser user, Long[] roles) {
+        user.setPassword(null);
+        user.setUsername(null);
+        user.setModifyTime(new Date());
+        this.updateNotNull(user);
+        Example example = new Example(SysUserRole.class);
+        example.createCriteria().andCondition("user_id=", user.getUserId());
+        this.sysUserMapper.deleteByExample(example);
+        saveOrUpdateRole(user, roles);
+    }
+
+    @Override
+    public void deleteUser(SysUser user) {
+        this.delete(user.getUserId());
+    }
+
     private void saveOrUpdateRole(SysUser user,Long[] roles){
         Arrays.stream(roles).forEach(role->{
             SysUserRole userRole = new SysUserRole();

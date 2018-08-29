@@ -20,33 +20,50 @@ import java.util.List;
 public class UserController extends BaseController {
 
 
-    @Autowired
-    UserService userService;
+  @Autowired
+  UserService userService;
 
-    @PostMapping("/list")
-    public ResponseVo list(Params params,SysUser user){
-        PageHelper.startPage(params.getPage(),params.getPageSize());
-        List<SysUser> users = userService.findUserMsg(user);
+  @PostMapping("/list")
+  public ResponseVo list(Params params,SysUser user){
+    PageHelper.startPage(params.getPage(),params.getPageSize());
+    List<SysUser> users = userService.findUserMsg(user);
 
-        PageInfo<SysUser> userPageInfo = new PageInfo<>(users);
+    PageInfo<SysUser> userPageInfo = new PageInfo<>(users);
 
-        return this.pageData(userPageInfo);
+    return this.pageData(userPageInfo);
+  }
+
+  @PostMapping("/add")
+  public ResponseVo addUser(SysUser user,Long[] roles) {
+    if(user.getStatus().equalsIgnoreCase("true")){
+      user.setStatus("1");
+    }else{
+      user.setStatus("2");
     }
+    userService.addUser(user,roles);
+    return ResponseVo.ok("success");
+  }
 
-    @PostMapping("/add")
-    public ResponseVo addUser(SysUser user,Long[] roles) {
-        if(user.getStatus().equalsIgnoreCase("true")){
-            user.setStatus("1");
-        }else{
-            user.setStatus("2");
-        }
-        userService.addUser(user,roles);
-        return ResponseVo.ok("success");
+  @GetMapping("/userwithrole")
+  public ResponseVo getUserWithRole(SysUser user){
+
+    return ResponseVo.ok(userService.findUserWithRole(user));
+  }
+
+  @PostMapping("/update")
+  public ResponseVo updateUser(SysUser user,Long[] roles){
+    if(user.getStatus().equalsIgnoreCase("true")){
+      user.setStatus("1");
+    }else{
+      user.setStatus("2");
     }
+    userService.updateUser(user, roles);
+    return ResponseVo.ok("修改成功");
+  }
+  @PostMapping("/delete")
+  public ResponseVo deleteUser(SysUser user){
+    userService.deleteUser(user);
+    return ResponseVo.ok("删除成功");
+  }
 
-    @GetMapping("/userwithrole")
-    public ResponseVo getUserWithRole(SysUser user){
-
-        return ResponseVo.ok(userService.findUserWithRole(user));
-    }
 }

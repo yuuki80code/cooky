@@ -19,4 +19,7 @@ public interface UserService extends IService<SysUser> {
 
     UserWithRole findUserWithRole(SysUser user);
 
+    void updateUser(SysUser user,Long[] roles);
+
+    void deleteUser(SysUser user);
 }
