@@ -5,12 +5,13 @@
 
     <property name="log.path" value="log" />
     <property name="log.maxHistory" value="15" />
+    <property name="log.colorPattern" value="[%thread] %highlight(%-5level) %cyan(%logger{15}) - %highlight(%msg) %n"/>
     <property name="log.pattern" value="%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n" />
 
     <!--输出到控制台-->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${log.pattern}</pattern>
+            <pattern>${log.colorPattern}</pattern>
         </encoder>
     </appender>
 

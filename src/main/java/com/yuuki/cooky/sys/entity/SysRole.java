@@ -10,6 +10,7 @@ public class SysRole {
      */
     @Id
     @Column(name = "ROLE_ID")
+    @GeneratedValue(generator = "JDBC")
     private Long roleId;
 
     /**

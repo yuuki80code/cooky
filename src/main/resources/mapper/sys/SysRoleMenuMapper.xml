@@ -8,4 +8,12 @@
     <result column="ROLE_ID" jdbcType="BIGINT" property="roleId" />
     <result column="MENU_ID" jdbcType="BIGINT" property="menuId" />
   </resultMap>
+
+
+  <select id="findMenuByRole" parameterType="long" resultType="long">
+    SELECT menu_id
+    FROM sys_role_menu
+    WHERE role_id = #{roleId}
+  </select>
+
 </mapper>

@@ -4,4 +4,10 @@ import com.yuuki.cooky.common.service.IService;
 import com.yuuki.cooky.sys.entity.SysUserRole;
 
 public interface UserRoleService extends IService<SysUserRole> {
+
+    void deleteByUserId(Long userId);
+
+    void deleteByRoleId(Long roleId);
+
+
 }

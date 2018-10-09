@@ -10,6 +10,8 @@ public interface DeptService extends IService<SysDept> {
 
     ResponseVo deptTreeData();
 
-    ResponseVo addDept(SysDept dept);
+    ResponseVo addOrUpdateDept(SysDept dept);
+
+    ResponseVo deleteDept(Long id);
 
 }

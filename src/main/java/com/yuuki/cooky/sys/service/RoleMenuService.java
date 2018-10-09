@@ -4,4 +4,10 @@ import com.yuuki.cooky.common.service.IService;
 import com.yuuki.cooky.sys.entity.SysRoleMenu;
 
 public interface RoleMenuService extends IService<SysRoleMenu> {
+
+    void deleteByRoleId(Long roleId);
+
+    void deleteByMenuId(Long menuId);
+
+
 }

@@ -10,6 +10,7 @@ public class SysMenu {
      */
     @Id
     @Column(name = "MENU_ID")
+    @GeneratedValue(generator = "JDBC")
     private Long menuId;
 
     /**

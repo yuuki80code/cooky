@@ -7,6 +7,7 @@ import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.common.util.TreeUtil;
 import com.yuuki.cooky.sys.entity.SysDept;
 import com.yuuki.cooky.sys.service.DeptService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Method;
@@ -55,10 +56,21 @@ public class DeptServiceImpl extends BaseService<SysDept> implements DeptService
 
 
     @Override
-    public ResponseVo addDept(SysDept dept) {
-        dept.setCreateTime(new Date());
-        this.save(dept);
+    public ResponseVo addOrUpdateDept(SysDept dept) {
+        if(dept.getDeptId() == -1){
+            dept.setCreateTime(new Date());
+            this.save(dept);
+            return ResponseVo.ok("添加成功");
+        }else {
+            this.updateNotNull(dept);
+            return ResponseVo.ok("更新成功");
+        }
 
-        return ResponseVo.ok("添加成功");
+    }
+
+    @Override
+    public ResponseVo deleteDept(Long id) {
+        this.delete(id);
+        return ResponseVo.ok("删除成功");
     }
 }

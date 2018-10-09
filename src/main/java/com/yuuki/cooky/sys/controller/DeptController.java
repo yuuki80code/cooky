@@ -24,9 +24,14 @@ public class DeptController extends BaseController {
         return deptService.deptTreeTableData();
     }
 
-    @PostMapping("/add")
-    public ResponseVo addDept(SysDept dept){
-        return deptService.addDept(dept);
+    @PostMapping("/edit")
+    public ResponseVo editDept(SysDept dept){
+        return deptService.addOrUpdateDept(dept);
+    }
+
+    @PostMapping("/delete")
+    public ResponseVo deleteDept(Long id) {
+        return deptService.deleteDept(id);
     }
 
 
