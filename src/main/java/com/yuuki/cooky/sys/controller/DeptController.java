@@ -14,15 +14,15 @@ public class DeptController extends BaseController {
     @Autowired
     DeptService deptService;
 
-    @GetMapping("/tree")
-    public ResponseVo treeList(){
-        return deptService.deptTreeData();
+    @GetMapping("/list")
+    public ResponseVo getDeptList(){
+        return ResponseVo.ok(deptService.getDeptList());
     }
 
-    @GetMapping("/treetable")
-    public ResponseVo treeTableList(){
-        return deptService.deptTreeTableData();
-    }
+//    @GetMapping("/treetable")
+//    public ResponseVo treeTableList(){
+//        return deptService.deptTreeTableData();
+//    }
 
     @PostMapping("/edit")
     public ResponseVo editDept(SysDept dept){

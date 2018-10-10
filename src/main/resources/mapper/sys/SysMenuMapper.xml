@@ -1,29 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yuuki.cooky.sys.dao.SysMenuMapper">
-  <resultMap id="BaseResultMap" type="com.yuuki.cooky.sys.entity.SysMenu">
-    <!--
-      WARNING - @mbg.generated
-    -->
-    <id column="MENU_ID" jdbcType="BIGINT" property="menuId" />
-    <result column="PARENT_ID" jdbcType="BIGINT" property="parentId" />
-    <result column="MENU_NAME" jdbcType="VARCHAR" property="menuName" />
-    <result column="URL" jdbcType="VARCHAR" property="url" />
-    <result column="ICON" jdbcType="VARCHAR" property="icon" />
-    <result column="TYPE" jdbcType="CHAR" property="type" />
-    <result column="ORDER_NUM" jdbcType="BIGINT" property="orderNum" />
-    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
-    <result column="PERMS" jdbcType="LONGVARCHAR" property="perms" />
-  </resultMap>
+    <resultMap id="BaseResultMap" type="com.yuuki.cooky.sys.entity.SysMenu">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="MENU_ID" jdbcType="BIGINT" property="menuId"/>
+        <result column="PARENT_ID" jdbcType="BIGINT" property="parentId"/>
+        <result column="MENU_NAME" jdbcType="VARCHAR" property="menuName"/>
+        <result column="URL" jdbcType="VARCHAR" property="url"/>
+        <result column="ICON" jdbcType="VARCHAR" property="icon"/>
+        <result column="TYPE" jdbcType="CHAR" property="type"/>
+        <result column="ORDER_NUM" jdbcType="BIGINT" property="orderNum"/>
+        <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime"/>
+        <result column="PERMS" jdbcType="LONGVARCHAR" property="perms"/>
+    </resultMap>
 
 
-  <select id="findUserPermissions" resultType="sysMenu">
-  	select m.perms from sys_role r
+    <select id="findUserPermissions" resultType="sysMenu">
+        select m.perms from sys_role r
         left join sys_user_role ur on(r.role_id = ur.role_id)
         left join sys_user u on(u.user_id = ur.user_id)
         left join sys_role_menu rm on(rm.role_id = r.role_id)
         left join sys_menu m on(m.menu_id = rm.menu_id )
         where u.user_id = #{userid} and m.perms is not null
-  </select>
+    </select>
+
+    <update id="changeMenuToTop" parameterType="long">
+        update sys_menu
+        set parent_id = 0
+        where parent_id = #{id}
+    </update>
 </mapper>

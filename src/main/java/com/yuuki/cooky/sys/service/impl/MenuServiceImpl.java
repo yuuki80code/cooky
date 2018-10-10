@@ -5,8 +5,10 @@ import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.sys.dao.SysMenuMapper;
 import com.yuuki.cooky.sys.entity.SysMenu;
 import com.yuuki.cooky.sys.service.MenuService;
+import com.yuuki.cooky.sys.service.RoleMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +17,10 @@ import java.util.List;
 public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService {
 
     @Autowired
-    SysMenuMapper sysMenuMapper;
+    private SysMenuMapper sysMenuMapper;
+
+    @Autowired
+    private RoleMenuService roleMenuService;
 
     @Override
     public List<SysMenu> findUserPermissions(Long userid) {
@@ -38,8 +43,11 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
     }
 
     @Override
+    @Transactional
     public ResponseVo deleteMenu(Long id) {
         this.delete(id);
+        roleMenuService.deleteByMenuId(id);
+        sysMenuMapper.changeMenuToTop(id);
         return ResponseVo.ok("删除成功");
     }
 }

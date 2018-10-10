@@ -10,6 +10,7 @@ public class SysDept {
      */
     @Id
     @Column(name = "DEPT_ID")
+    @GeneratedValue(generator = "JDBC")
     private Long deptId;
 
     /**

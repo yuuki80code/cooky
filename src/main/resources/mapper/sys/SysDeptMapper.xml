@@ -11,4 +11,8 @@
     <result column="ORDER_NUM" jdbcType="BIGINT" property="orderNum" />
     <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
+
+  <delete id="deleteChild" parameterType="long">
+    DELETE FROM sys_dept WHERE PARENT_ID = #{id}
+  </delete>
 </mapper>

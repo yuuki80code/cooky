@@ -32,6 +32,8 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
 
     @Autowired
     private SysUserRoleMapper userRoleMapper;
+
+
     @Override
     public ResponseVo login(String username, String password) {
 
@@ -104,8 +106,10 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
     }
 
     @Override
+    @Transactional
     public void deleteUser(SysUser user) {
         this.delete(user.getUserId());
+        userRoleService.deleteByUserId(user.getUserId());
     }
 
     private void saveOrUpdateRole(SysUser user,Long[] roles){

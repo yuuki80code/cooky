@@ -4,6 +4,7 @@ import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysMenu;
 import com.yuuki.cooky.sys.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +26,9 @@ public class MenuController {
     }
 
 
+    // 不知道为什么不加BindingResult 就会报400 - -
     @PostMapping("/edit")
-    public ResponseVo edit(SysMenu menu) {
+    public ResponseVo edit(SysMenu menu, BindingResult bindingResult) {
 
         return menuService.addOrUpdateMenu(menu);
     }

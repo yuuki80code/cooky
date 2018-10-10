@@ -4,9 +4,11 @@ import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.common.service.IService;
 import com.yuuki.cooky.sys.entity.SysDept;
 
+import java.util.List;
+
 public interface DeptService extends IService<SysDept> {
 
-    ResponseVo deptTreeTableData();
+    List<SysDept> getDeptList();
 
     ResponseVo deptTreeData();
 

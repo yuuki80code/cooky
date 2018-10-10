@@ -8,4 +8,6 @@ import java.util.List;
 public interface SysMenuMapper extends MyMapper<SysMenu> {
 
     List<SysMenu> findUserPermissions(Long userid);
+
+    void changeMenuToTop(Long id);
 }
