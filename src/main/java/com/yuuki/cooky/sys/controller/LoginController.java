@@ -7,9 +7,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.security.Security;
 
 @RestController
@@ -19,15 +22,15 @@ public class LoginController {
     UserService userService;
 
     @PostMapping("/login")
-    public ResponseVo login(String username,String password){
+    public ResponseVo login(String username, String password, HttpServletRequest request,HttpServletResponse response){
+
 
         return userService.login(username, password);
     }
 
-    @PostMapping("/test")
-    @RequiresPermissions("dept:list")
-    public ResponseVo testPre(){
-        return ResponseVo.ok("have");
+    @GetMapping("/realm")
+    public ResponseVo realm() {
+        return ResponseVo.ok("认证完成");
     }
 
 

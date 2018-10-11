@@ -2,6 +2,10 @@ server:
   port: 8080
   tomcat:
     uri-encoding: utf-8
+#  servlet:
+#    session:
+#      cookie:
+#        http-only: true
 
 spring:
   # 数据源配置

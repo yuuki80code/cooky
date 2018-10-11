@@ -4,7 +4,9 @@ import com.yuuki.cooky.common.controller.BaseController;
 import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysDept;
 import com.yuuki.cooky.sys.service.DeptService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +17,7 @@ public class DeptController extends BaseController {
     DeptService deptService;
 
     @GetMapping("/list")
+    @RequiresPermissions("dept:list")
     public ResponseVo getDeptList(){
         return ResponseVo.ok(deptService.getDeptList());
     }
@@ -25,7 +28,7 @@ public class DeptController extends BaseController {
 //    }
 
     @PostMapping("/edit")
-    public ResponseVo editDept(SysDept dept){
+    public ResponseVo editDept(SysDept dept, BindingResult bindingResult){
         return deptService.addOrUpdateDept(dept);
     }
 

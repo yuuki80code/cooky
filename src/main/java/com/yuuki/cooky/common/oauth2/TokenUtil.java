@@ -11,8 +11,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 public class TokenUtil {
-    // 过期时间5分钟
-    private static final long EXPIRE_TIME = 5*60*1000;
+    // 过期时间一小时
+    private static final long EXPIRE_TIME = 60*60*1000;
 
     /**
      * 校验token是否正确

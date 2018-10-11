@@ -1,6 +1,8 @@
 package com.yuuki.cooky.common.oauth2;
 
 
+import com.alibaba.fastjson.JSON;
+import com.yuuki.cooky.common.model.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @Slf4j
 public class OAuth2Filter extends BasicHttpAuthenticationFilter {
@@ -24,8 +27,8 @@ public class OAuth2Filter extends BasicHttpAuthenticationFilter {
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
 
-        //String authorization = req.getHeader("Authorization");
-        return  req.getRequestURL().toString().contains("login");
+        String authorization = req.getHeader("Authorization");
+        return authorization != null;
     }
 
     /**
@@ -48,7 +51,7 @@ public class OAuth2Filter extends BasicHttpAuthenticationFilter {
      * 例如我们提供一个地址 GET /article
      * 登入用户和游客看到的内容是不同的
      * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
-     * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
+     * 所，以我们在这里返回trueController中可以通过 subject.isAuthenticated() 来判断用户是否登入
      * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
      * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
      */
@@ -58,7 +61,8 @@ public class OAuth2Filter extends BasicHttpAuthenticationFilter {
             try {
                 executeLogin(request, response);
             } catch (Exception e) {
-                response401(request, response); //TODO 返回json
+                log.error(e.getMessage());
+                //response401(request, response);
             }
         }
         return true;
@@ -88,7 +92,9 @@ public class OAuth2Filter extends BasicHttpAuthenticationFilter {
     private void response401(ServletRequest req, ServletResponse resp) {
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-            httpServletResponse.sendRedirect("/401");
+//            httpServletResponse.sendRedirect("/401");
+            PrintWriter writer = httpServletResponse.getWriter();
+            writer.append(JSON.toJSONString(ResponseVo.unAuth("未登录或者token过期")));
         } catch (IOException e) {
             log.error(e.getMessage());
         }

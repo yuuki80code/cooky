@@ -3,6 +3,7 @@ package com.yuuki.cooky.sys.controller;
 import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysMenu;
 import com.yuuki.cooky.sys.service.MenuService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,12 @@ public class MenuController {
     @PostMapping("/delete")
     public ResponseVo delete(Long id) {
         return menuService.deleteMenu(id);
+    }
+
+
+    @RequestMapping("/usermenu")
+    public ResponseVo getUserMenu() {
+        return null;
     }
 
 }

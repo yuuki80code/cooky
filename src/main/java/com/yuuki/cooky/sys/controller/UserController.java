@@ -9,6 +9,7 @@ import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysUser;
 import com.yuuki.cooky.sys.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

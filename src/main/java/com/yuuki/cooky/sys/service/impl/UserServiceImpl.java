@@ -1,6 +1,7 @@
 package com.yuuki.cooky.sys.service.impl;
 
 import com.yuuki.cooky.common.model.ResponseVo;
+import com.yuuki.cooky.common.oauth2.OAuth2Token;
 import com.yuuki.cooky.common.oauth2.TokenUtil;
 import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.common.util.MD5Util;
@@ -11,15 +12,13 @@ import com.yuuki.cooky.sys.entity.SysUserRole;
 import com.yuuki.cooky.sys.entity.UserWithRole;
 import com.yuuki.cooky.sys.service.UserRoleService;
 import com.yuuki.cooky.sys.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class UserServiceImpl extends BaseService<SysUser> implements UserService {
@@ -51,7 +50,10 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
             return ResponseVo.error("账号已锁定");
         }
         String token = TokenUtil.sign(sysUser.getUserId(), sysUser.getPassword());
-        return ResponseVo.ok("登陆成功",token);
+        Map<String,Object> data = new HashMap<>();
+        data.put("token",token);
+        data.put("username",sysUser.getUsername());
+        return ResponseVo.ok("登陆成功",data);
     }
 
     @Override
