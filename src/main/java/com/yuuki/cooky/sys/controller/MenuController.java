@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestController
@@ -41,8 +42,9 @@ public class MenuController {
 
 
     @RequestMapping("/usermenu")
-    public ResponseVo getUserMenu() {
-        return null;
+    public ResponseVo getUserMenu(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        return ResponseVo.ok(menuService.getUserMenu(authorization));
     }
 
 }

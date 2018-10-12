@@ -17,7 +17,6 @@ public class DeptController extends BaseController {
     DeptService deptService;
 
     @GetMapping("/list")
-    @RequiresPermissions("dept:list")
     public ResponseVo getDeptList(){
         return ResponseVo.ok(deptService.getDeptList());
     }

@@ -5,6 +5,7 @@ import com.yuuki.cooky.common.service.IService;
 import com.yuuki.cooky.sys.entity.SysMenu;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MenuService extends IService<SysMenu> {
 
@@ -13,4 +14,6 @@ public interface MenuService extends IService<SysMenu> {
     ResponseVo addOrUpdateMenu(SysMenu menu);
 
     ResponseVo deleteMenu(Long id);
+
+    Map<String,Map<String, Object>> getUserMenu(String token);
 }

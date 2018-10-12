@@ -12,6 +12,7 @@ import com.yuuki.cooky.sys.entity.SysUserRole;
 import com.yuuki.cooky.sys.entity.UserWithRole;
 import com.yuuki.cooky.sys.service.UserRoleService;
 import com.yuuki.cooky.sys.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import tk.mybatis.mapper.entity.Example;
 import java.util.*;
 
 @Service
+@Slf4j
 public class UserServiceImpl extends BaseService<SysUser> implements UserService {
 
     @Autowired
@@ -49,6 +51,7 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
         if(sysUser.getStatus().equals(0)){
             return ResponseVo.error("账号已锁定");
         }
+        log.error("userid: {}",sysUser.getUserId());
         String token = TokenUtil.sign(sysUser.getUserId(), sysUser.getPassword());
         Map<String,Object> data = new HashMap<>();
         data.put("token",token);

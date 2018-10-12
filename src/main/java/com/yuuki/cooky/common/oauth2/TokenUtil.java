@@ -47,7 +47,7 @@ public class TokenUtil {
     }
 
     /**
-     * 生成签名,5min后过期
+     * 生成签名,xmin后过期
      * @param userid 用户id
      * @param secret 用户的密码
      * @return 加密的token
@@ -64,5 +64,10 @@ public class TokenUtil {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
+    }
+
+    public static void main(String args[]) {
+        Long usernId = getUsernId("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzkzMjM2NjksInVzZXJpZCI6M30.Bx67sMQw3Ty37PS-6osqRQfUS0493DI1Y1aZBA6DCbs");
+        System.out.printf(usernId+"");
     }
 }

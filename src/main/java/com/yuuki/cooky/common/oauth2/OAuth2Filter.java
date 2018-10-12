@@ -28,7 +28,8 @@ public class OAuth2Filter extends BasicHttpAuthenticationFilter {
         HttpServletRequest req = (HttpServletRequest) request;
 
         String authorization = req.getHeader("Authorization");
-        return authorization != null;
+
+        return authorization != null && ((HttpServletRequest) request).getRequestURL().toString().contains("login");
     }
 
     /**
