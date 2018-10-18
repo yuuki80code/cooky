@@ -27,19 +27,21 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
         return sysMenuMapper.findUserPermissions(userid);
     }
 
-    @Override
-    public ResponseVo addOrUpdateMenu(SysMenu menu) {
-        if(menu.getMenuId() == 0){
-            menu.setCreateTime(new Date());
-            menu.setModifyTime(new Date());
-            this.save(menu);
-            return ResponseVo.ok("新增成功");
-        }else {
-            menu.setModifyTime(new Date());
-            this.updateNotNull(menu);
-            return ResponseVo.ok("修改成功");
-        }
 
+
+    @Override
+    public ResponseVo addMenu(SysMenu menu) {
+        menu.setCreateTime(new Date());
+        menu.setModifyTime(new Date());
+        this.save(menu);
+        return ResponseVo.ok("新增成功");
+    }
+
+    @Override
+    public ResponseVo updateMenu(SysMenu menu) {
+        menu.setModifyTime(new Date());
+        this.updateNotNull(menu);
+        return ResponseVo.ok("修改成功");
     }
 
     @Override

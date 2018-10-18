@@ -42,37 +42,18 @@ public class DeptServiceImpl extends BaseService<SysDept> implements DeptService
     }
 
     @Override
-    public ResponseVo deptTreeData() {
-        List<SysDept> depts = this.selectAll();
-        List<Tree<SysDept>> trees = new ArrayList<>();
-        depts.forEach(dept->{
-            Tree<SysDept> tree = new Tree<>();
-            tree.setTitle(dept.getDeptName());
-            tree.setParentId(dept.getParentId().intValue());
-            tree.setId(dept.getDeptId().intValue());
-            tree.setExtraData(dept.getCreateTime());
-            trees.add(tree);
-        });
-        List<Tree<SysDept>> build = TreeUtil.buildList(trees,"0");
-
-        return ResponseVo.ok(build);
+    public ResponseVo addDept(SysDept dept) {
+        dept.setCreateTime(new Date());
+        this.save(dept);
+        return ResponseVo.ok("添加成功");
     }
-
-
-
 
     @Override
-    public ResponseVo addOrUpdateDept(SysDept dept) {
-        if(dept.getDeptId() == 0){
-            dept.setCreateTime(new Date());
-            this.save(dept);
-            return ResponseVo.ok("添加成功");
-        }else {
-            this.updateNotNull(dept);
-            return ResponseVo.ok("更新成功");
-        }
-
+    public ResponseVo updateDept(SysDept dept) {
+        this.updateNotNull(dept);
+        return ResponseVo.ok("更新成功");
     }
+
 
     @Override
     @Transactional

@@ -36,6 +36,7 @@ public class UserController extends BaseController {
   }
 
   @PostMapping("/add")
+  @RequiresPermissions("user_add")
   public ResponseVo addUser(SysUser user,Long[] roles) {
     if(user.getStatus().equalsIgnoreCase("true")){
       user.setStatus("1");
@@ -53,6 +54,7 @@ public class UserController extends BaseController {
   }
 
   @PostMapping("/update")
+  @RequiresPermissions("user_edit")
   public ResponseVo updateUser(SysUser user, Long[] roles, BindingResult bindingResult){
     if(user.getStatus().equalsIgnoreCase("true")){
       user.setStatus("1");
@@ -63,6 +65,7 @@ public class UserController extends BaseController {
     return ResponseVo.ok("修改成功");
   }
   @PostMapping("/delete")
+  @RequiresPermissions("user_delete")
   public ResponseVo deleteUser(SysUser user){
     userService.deleteUser(user);
     return ResponseVo.ok("删除成功");

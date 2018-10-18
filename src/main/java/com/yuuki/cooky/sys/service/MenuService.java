@@ -11,7 +11,10 @@ public interface MenuService extends IService<SysMenu> {
 
     List<SysMenu> findUserPermissions(Long userid);
 
-    ResponseVo addOrUpdateMenu(SysMenu menu);
+
+    ResponseVo addMenu(SysMenu menu);
+
+    ResponseVo updateMenu(SysMenu menu);
 
     ResponseVo deleteMenu(Long id);
 

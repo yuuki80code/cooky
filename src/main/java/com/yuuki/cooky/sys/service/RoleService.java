@@ -10,7 +10,10 @@ public interface RoleService extends IService<SysRole> {
 
     List<SysRole> findUserRole(Long userid);
 
-    ResponseVo editRole(SysRole role,Long[] menuIds);
+
+    ResponseVo addRole(SysRole role,Long[] menuIds);
+
+    ResponseVo updateRole(SysRole role,Long[] menuIds);
 
     List<Long> findMenuByRole(Long id);
 

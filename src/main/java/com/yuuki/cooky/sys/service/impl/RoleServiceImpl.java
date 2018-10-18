@@ -35,24 +35,27 @@ public class RoleServiceImpl extends BaseService<SysRole> implements RoleService
         return sysRoleMapper.findUserRole(userid);
     }
 
+
+    @Override
+    public ResponseVo addRole(SysRole role, Long[] menuIds) {
+        role.setCreateTime(new Date());
+        this.save(role);
+        this.setRoleMenu(role, menuIds);
+        return ResponseVo.ok("新增成功");
+    }
+
     @Override
     @Transactional
-    public ResponseVo editRole(SysRole role,Long[] menuIds) {
-        if(role.getRoleId() == 0){
-            role.setCreateTime(new Date());
-            this.save(role);
-            this.setRoleMenu(role, menuIds);
-            return ResponseVo.ok("新增成功");
-        }else {
-            role.setModifyTime(new Date());
-            this.updateNotNull(role);
-            Example example = new Example(SysRoleMenu.class);
-            example.createCriteria().andCondition("role_id=", role.getRoleId());
-            this.sysRoleMenuMapper.deleteByExample(example);
-            setRoleMenu(role, menuIds);
-            return ResponseVo.ok("修改成功");
-        }
+    public ResponseVo updateRole(SysRole role, Long[] menuIds) {
+        role.setModifyTime(new Date());
+        this.updateNotNull(role);
+        Example example = new Example(SysRoleMenu.class);
+        example.createCriteria().andCondition("role_id=", role.getRoleId());
+        this.sysRoleMenuMapper.deleteByExample(example);
+        setRoleMenu(role, menuIds);
+        return ResponseVo.ok("修改成功");
     }
+
     @Override
     @Transactional
     public ResponseVo deleteRole(Long roleId) {

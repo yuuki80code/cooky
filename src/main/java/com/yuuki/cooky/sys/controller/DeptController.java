@@ -26,12 +26,20 @@ public class DeptController extends BaseController {
 //        return deptService.deptTreeTableData();
 //    }
 
-    @PostMapping("/edit")
-    public ResponseVo editDept(SysDept dept, BindingResult bindingResult){
-        return deptService.addOrUpdateDept(dept);
+    @PostMapping("/add")
+    @RequiresPermissions("dept_add")
+    public ResponseVo addDept(SysDept dept, BindingResult bindingResult){
+        return deptService.addDept(dept);
+    }
+
+    @PostMapping("/update")
+    @RequiresPermissions("dept_update")
+    public ResponseVo updateDept(SysDept dept, BindingResult bindingResult){
+        return deptService.updateDept(dept);
     }
 
     @PostMapping("/delete")
+    @RequiresPermissions("dept_delete")
     public ResponseVo deleteDept(Long id) {
         return deptService.deleteDept(id);
     }

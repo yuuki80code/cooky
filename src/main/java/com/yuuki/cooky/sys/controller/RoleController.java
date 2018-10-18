@@ -3,6 +3,7 @@ package com.yuuki.cooky.sys.controller;
 import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysRole;
 import com.yuuki.cooky.sys.service.RoleService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +20,16 @@ public class RoleController {
         return ResponseVo.ok(roleService.selectAll());
     }
 
-    @PostMapping("/edit")
-    public ResponseVo editRole(SysRole role,Long[] menuIds) {
+    @PostMapping("/add")
+    @RequiresPermissions("role_add")
+    public ResponseVo add(SysRole role,Long[] menuIds) {
+        return roleService.addRole(role,menuIds);
+    }
 
-        return roleService.editRole(role,menuIds);
+    @PostMapping("/update")
+    @RequiresPermissions("role_edit")
+    public ResponseVo update(SysRole role,Long[] menuIds) {
+        return roleService.updateRole(role,menuIds);
     }
 
     @GetMapping("/menus")
@@ -31,6 +38,7 @@ public class RoleController {
     }
 
     @PostMapping("/delete")
+    @RequiresPermissions("role_delete")
     public ResponseVo deleteRole(Long roleId) {
         return roleService.deleteRole(roleId);
     }
