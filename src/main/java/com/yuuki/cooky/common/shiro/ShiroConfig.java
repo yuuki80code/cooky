@@ -38,26 +38,6 @@ public class ShiroConfig {
     @Value("${spring.redis.timeout}")
     private int timeout;
 
-    /**
-     * shiro 中配置 redis 缓存
-     *
-     * @return RedisManager
-     */
-    private RedisManager redisManager() {
-        RedisManager redisManager = new RedisManager();
-        // 缓存时间，单位为秒
-        redisManager.setExpire(6000);
-        redisManager.setHost(host);
-        redisManager.setPort(port);
-        redisManager.setTimeout(timeout);
-        return redisManager;
-    }
-
-    private RedisCacheManager cacheManager() {
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        return redisCacheManager;
-    }
 
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
@@ -74,25 +54,11 @@ public class ShiroConfig {
          * 自定义url规则
          * http://shiro.apache.org/web.html#urls-
          */
-        Map<String, String> filterRuleMap = new HashMap<>();
+        Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 所有请求通过我们自己的JWT Filter
+        filterRuleMap.put("/login", "anon");
         filterRuleMap.put("/**", "oauth2");
-        // 登录的 url
-        //shiroFilterFactoryBean.setLoginUrl("/login");
-        // 登录成功后跳转的 url
-        //shiroFilterFactoryBean.setSuccessUrl("/home");
-        // 未授权 url
-        //shiroFilterFactoryBean.setUnauthorizedUrl("/403");
-//        LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-//        // 设置免认证 url
-//        String[] anonUrls = StringUtils.splitByWholeSeparatorPreserveAllTokens("/css/**,/js/**,/fonts/**,/img/**,/druid/**,/user/regist,/gifCode,/", ",");
-//        for (String url : anonUrls) {
-//            filterChainDefinitionMap.put(url, "anon");
-//        }
-//        // 配置退出过滤器，其中具体的退出代码 Shiro已经替我们实现了
-//        filterChainDefinitionMap.put("/logout", "logout");
-        // 除上以外所有 url都必须认证通过才可以访问，未通过认证自动访问 LoginUrl
-//        filterChainDefinitionMap.put("/**", "user");
+
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterRuleMap);
 
@@ -116,7 +82,6 @@ public class ShiroConfig {
         securityManager.setSubjectDAO(subjectDAO);
 
         // 配置 缓存管理类 cacheManager
-        securityManager.setCacheManager(cacheManager());
         //securityManager.setSessionManager(sessionManager());
         return securityManager;
     }
@@ -154,12 +119,7 @@ public class ShiroConfig {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
-    @Bean
-    public RedisSessionDAO redisSessionDAO() {
-        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setRedisManager(redisManager());
-        return redisSessionDAO;
-    }
+
 
     /**
      * session 管理对象
@@ -174,7 +134,6 @@ public class ShiroConfig {
         // 设置session超时时间，单位为毫秒
         sessionManager.setGlobalSessionTimeout(60000);
         sessionManager.setSessionListeners(listeners);
-        sessionManager.setSessionDAO(redisSessionDAO());
         sessionManager.setSessionValidationSchedulerEnabled(true);
         sessionManager.setSessionIdCookieEnabled(true);
         return sessionManager;

@@ -52,7 +52,7 @@ public class MenuController {
 
 
     @RequestMapping("/usermenu")
-    @RequiresAuthentication
+//    @RequiresAuthentication
     public ResponseVo getUserMenu(HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         return ResponseVo.ok(menuService.getUserMenu(authorization));

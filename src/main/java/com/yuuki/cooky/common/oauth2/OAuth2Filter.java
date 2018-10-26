@@ -4,6 +4,11 @@ package com.yuuki.cooky.common.oauth2;
 import com.alibaba.fastjson.JSON;
 import com.yuuki.cooky.common.model.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,88 +21,60 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Slf4j
-public class OAuth2Filter extends BasicHttpAuthenticationFilter {
+public class OAuth2Filter extends AuthenticatingFilter {
 
 
-    /**
-     * 判断用户是否想要登入。
-     * 检测header里面是否包含Authorization字段即可
-     */
     @Override
-    protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-        HttpServletRequest req = (HttpServletRequest) request;
-
-        String authorization = req.getHeader("Authorization");
-
-        return authorization != null && ((HttpServletRequest) request).getRequestURL().toString().contains("login");
-    }
-
-    /**
-     *
-     */
-    @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authorization = httpServletRequest.getHeader("Authorization");
-
-        OAuth2Token token = new OAuth2Token(authorization);
-        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
-        getSubject(request, response).login(token);
-        // 如果没有抛出异常则代表登入成功，返回true
-        return true;
-    }
-
-    /**
-     * 这里我们详细说明下为什么最终返回的都是true，即允许访问
-     * 例如我们提供一个地址 GET /article
-     * 登入用户和游客看到的内容是不同的
-     * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
-     * 所，以我们在这里返回trueController中可以通过 subject.isAuthenticated() 来判断用户是否登入
-     * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
-     * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
-     */
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        if (isLoginAttempt(request, response)) {
-            try {
-                executeLogin(request, response);
-            } catch (Exception e) {
-                log.error(e.getMessage());
-                //response401(request, response);
-            }
+    protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        String token = getToken((HttpServletRequest) servletRequest);
+        if (StringUtils.isAllBlank(token)) {
+            return null;
         }
-        return true;
+        return new OAuth2Token(token);
     }
 
-    /**
-     * 对跨域提供支持
-     */
     @Override
-    protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
-        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-        httpServletResponse.setHeader("Access-Control-Allow-Headers", httpServletRequest.getHeader("Access-Control-Request-Headers"));
-        // 跨域时会首先发送一个option请求，这里我们给option请求直接返回正常状态
-        if (httpServletRequest.getMethod().equals(RequestMethod.OPTIONS.name())) {
-            httpServletResponse.setStatus(HttpStatus.OK.value());
+    protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        String token = getToken((HttpServletRequest) servletRequest);
+        if (StringUtils.isBlank(token)) {
+            HttpServletResponse response = (HttpServletResponse) servletResponse;
+            response.setHeader("Acccess-Control-Allow-Credentials","true");
+            response.setHeader("Access-Control-Origin","**");
+            response.getWriter().write(JSON.toJSONString(ResponseVo.error("token 错误")));
             return false;
         }
-        return super.preHandle(request, response);
+        return executeLogin(servletRequest, servletResponse);
     }
 
-    /**
-     * 将非法请求跳转到 /401
-     */
-    private void response401(ServletRequest req, ServletResponse resp) {
-        try {
-            HttpServletResponse httpServletResponse = (HttpServletResponse) resp;
-//            httpServletResponse.sendRedirect("/401");
-            PrintWriter writer = httpServletResponse.getWriter();
-            writer.append(JSON.toJSONString(ResponseVo.unAuth("未登录或者token过期")));
-        } catch (IOException e) {
-            log.error(e.getMessage());
+
+    @Override
+    protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest servletRequest, ServletResponse servletResponse) {
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        response.setContentType("application/json;charset=utf-8");
+        response.setHeader("Acccess-Control-Allow-Credentials","true");
+        response.setHeader("Access-Control-Origin","**");
+        try{
+            Throwable throwable = e.getCause() == null? e : e.getCause();
+            response.getWriter().write(JSON.toJSONString(ResponseVo.unAuth(throwable.getMessage())));
+        }catch (IOException exception){
+
         }
+        return false;
+    }
+
+    @Override
+    protected boolean isAccessAllowed(ServletRequest servletRequest, ServletResponse servletResponse, Object mappedValue) {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        if (request.getMethod().equals(RequestMethod.OPTIONS.name())) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private String getToken(HttpServletRequest request){
+        return request.getHeader("Authorization");
+
     }
 }
