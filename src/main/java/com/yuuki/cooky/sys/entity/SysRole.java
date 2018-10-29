@@ -1,10 +1,14 @@
 package com.yuuki.cooky.sys.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "sys_role")
-public class SysRole {
+public class SysRole implements Serializable {
+
+
+    private static final long serialVersionUID = -6807391924178062559L;
     /**
      * 角色ID
      */

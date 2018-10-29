@@ -1,10 +1,14 @@
 package com.yuuki.cooky.sys.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "sys_menu")
-public class SysMenu {
+public class SysMenu implements Serializable {
+
+
+    private static final long serialVersionUID = 8531604342898089766L;
     /**
      * 菜单/按钮ID
      */

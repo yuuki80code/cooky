@@ -39,7 +39,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
         if (StringUtils.isBlank(token)) {
             HttpServletResponse response = (HttpServletResponse) servletResponse;
             response.setHeader("Acccess-Control-Allow-Credentials","true");
-            response.setHeader("Access-Control-Origin","**");
+            response.setHeader("Access-Control-Allow-Origin","*");
             response.getWriter().write(JSON.toJSONString(ResponseVo.error("token 错误")));
             return false;
         }
@@ -52,7 +52,7 @@ public class OAuth2Filter extends AuthenticatingFilter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         response.setContentType("application/json;charset=utf-8");
         response.setHeader("Acccess-Control-Allow-Credentials","true");
-        response.setHeader("Access-Control-Origin","**");
+        response.setHeader("Access-Control-Allow-Origin","*");
         try{
             Throwable throwable = e.getCause() == null? e : e.getCause();
             response.getWriter().write(JSON.toJSONString(ResponseVo.unAuth(throwable.getMessage())));

@@ -9,10 +9,9 @@ import org.springframework.cache.annotation.Cacheable;
 import java.util.List;
 import java.util.Map;
 
-//@CacheConfig(cacheNames = "test")
-public interface MenuService extends IService<SysMenu> {
 
-
+@CacheConfig(cacheNames = "Menu2Service")
+public interface Menu2Service extends IService<SysMenu> {
     List<SysMenu> findUserPermissions(Long userid);
 
 
@@ -25,7 +24,8 @@ public interface MenuService extends IService<SysMenu> {
     @Cacheable(key = "#p0")
     Map<String, Map<String, Object>> getUserMenu(String token);
 
-
     @Cacheable(key = "#p0")
     String test(String key);
+
+
 }

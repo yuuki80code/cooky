@@ -42,7 +42,8 @@ public class ShiroRealm  extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        Long userid = TokenUtil.getUsernId(principalCollection.toString());
+        SysUser user = (SysUser) principalCollection.getPrimaryPrincipal();
+        Long userid = user.getUserId();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
         // 获取用户角色集
@@ -86,6 +87,6 @@ public class ShiroRealm  extends AuthorizingRealm {
             throw new AuthenticationException("Username or password error");
         }
 
-        return new SimpleAuthenticationInfo(token, token, getName());
+        return new SimpleAuthenticationInfo(user, token, getName());
     }
 }

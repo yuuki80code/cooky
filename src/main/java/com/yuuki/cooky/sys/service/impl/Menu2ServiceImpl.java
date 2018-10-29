@@ -5,8 +5,8 @@ import com.yuuki.cooky.common.oauth2.TokenUtil;
 import com.yuuki.cooky.common.service.impl.BaseService;
 import com.yuuki.cooky.sys.dao.SysMenuMapper;
 import com.yuuki.cooky.sys.entity.SysMenu;
+import com.yuuki.cooky.sys.service.Menu2Service;
 import com.yuuki.cooky.sys.service.RoleMenuService;
-import com.yuuki.cooky.sys.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService {
+public class Menu2ServiceImpl extends BaseService<SysMenu> implements Menu2Service {
 
     @Autowired
     private SysMenuMapper sysMenuMapper;
@@ -78,6 +78,6 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
     }
     @Override
     public String test(String key) {
-        return "ssssssssssss";
+        return "aaaaaaaa";
     }
 }

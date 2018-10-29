@@ -1,7 +1,10 @@
 package com.yuuki.cooky.common.service;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public interface IService<T> {
     List<T> selectAll();
 
