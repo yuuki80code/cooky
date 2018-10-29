@@ -57,7 +57,6 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
         return ResponseVo.ok("删除成功");
     }
 
-    @Cacheable(key = "#p0")
     @Override
     public Map<String, Map<String, Object>> getUserMenu(String token) {
         Long usernId = TokenUtil.getUsernId(token);
@@ -75,9 +74,5 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
         result.put("menu",menuMap);
         result.put("button",buttonMap);
         return result;
-    }
-    @Override
-    public String test(String key) {
-        return "ssssssssssss";
     }
 }

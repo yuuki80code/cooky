@@ -9,7 +9,7 @@ import org.springframework.cache.annotation.Cacheable;
 import java.util.List;
 import java.util.Map;
 
-//@CacheConfig(cacheNames = "test")
+@CacheConfig(cacheNames = "menu")
 public interface MenuService extends IService<SysMenu> {
 
 
@@ -25,7 +25,4 @@ public interface MenuService extends IService<SysMenu> {
     @Cacheable(key = "#p0")
     Map<String, Map<String, Object>> getUserMenu(String token);
 
-
-    @Cacheable(key = "#p0")
-    String test(String key);
 }
