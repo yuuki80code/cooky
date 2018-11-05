@@ -58,9 +58,8 @@ public class MenuServiceImpl extends BaseService<SysMenu> implements MenuService
     }
 
     @Override
-    public Map<String, Map<String, Object>> getUserMenu(String token) {
-        Long usernId = TokenUtil.getUsernId(token);
-        List<SysMenu> userMenus = sysMenuMapper.findUserMenus(usernId);
+    public Map<String, Map<String, Object>> getUserMenu(Long userId) {
+        List<SysMenu> userMenus = sysMenuMapper.findUserMenus(userId);
         Map<String,Map<String, Object>> result = new HashMap<>();
         Map<String,Object> menuMap= new HashMap<>();
         Map<String,Object> buttonMap = new HashMap<>();

@@ -5,32 +5,36 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
+@Component
 public class TokenUtil {
-    // 过期时间一小时
-    private static final long EXPIRE_TIME = 60*60*1000;
 
+    private static long EXPIRE_TIME;
+    @Value("${cooky.tokenExpire}")
+    public void setExpireTime(Long expireTime){
+        TokenUtil.EXPIRE_TIME = expireTime;
+    }
     /**
      * 校验token是否正确
      * @param token 密钥
      * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, Long userid, String secret) {
-        try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withClaim("userid", userid)
-                    .build();
-            DecodedJWT jwt = verifier.verify(token);
-            return true;
-        } catch (Exception exception) {
-            return false;
-        }
+    public static boolean verify(String token, Long userid, String secret) throws UnsupportedEncodingException,SignatureVerificationException,TokenExpiredException {
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        JWTVerifier verifier = JWT.require(algorithm)
+                .withClaim("userid", userid)
+                .build();
+        DecodedJWT jwt = verifier.verify(token);
+        return true;
     }
 
     /**
@@ -70,4 +74,6 @@ public class TokenUtil {
         Long usernId = getUsernId("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzkzMjM2NjksInVzZXJpZCI6M30.Bx67sMQw3Ty37PS-6osqRQfUS0493DI1Y1aZBA6DCbs");
         System.out.printf(usernId+"");
     }
+
+
 }

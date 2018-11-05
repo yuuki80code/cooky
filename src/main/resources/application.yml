@@ -118,3 +118,7 @@ logging:
         cooky:
           sys:
             dao: debug
+
+cooky:
+  # token 过期时间
+  tokenExpire: 10

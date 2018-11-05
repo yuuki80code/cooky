@@ -23,6 +23,6 @@ public interface MenuService extends IService<SysMenu> {
     ResponseVo deleteMenu(Long id);
 
     @Cacheable(key = "#p0")
-    Map<String, Map<String, Object>> getUserMenu(String token);
+    Map<String, Map<String, Object>> getUserMenu(Long userId);
 
 }

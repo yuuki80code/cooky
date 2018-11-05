@@ -1,5 +1,6 @@
 package com.yuuki.cooky.sys.controller;
 
+import com.yuuki.cooky.common.controller.BaseController;
 import com.yuuki.cooky.common.model.ResponseVo;
 import com.yuuki.cooky.sys.entity.SysMenu;
 import com.yuuki.cooky.sys.service.MenuService;
@@ -15,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/menu")
-public class MenuController {
+public class MenuController extends BaseController {
 
 
 
@@ -54,8 +55,7 @@ public class MenuController {
     @RequestMapping("/usermenu")
     @RequiresAuthentication
     public ResponseVo getUserMenu(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        return ResponseVo.ok(menuService.getUserMenu(authorization));
+        return ResponseVo.ok(menuService.getUserMenu(getUserId()));
     }
 
 }

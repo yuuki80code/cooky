@@ -1,5 +1,6 @@
 package com.yuuki.cooky.common.shiro;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.yuuki.cooky.common.oauth2.OAuth2Token;
 import com.yuuki.cooky.common.oauth2.TokenUtil;
 import com.yuuki.cooky.sys.entity.SysMenu;
@@ -16,6 +17,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -87,8 +89,14 @@ public class ShiroRealm  extends AuthorizingRealm {
             throw new AuthenticationException("User didn't existed!");
         }
 
-        if (! TokenUtil.verify(token, userid, user.getPassword())) {
+        try {
+           TokenUtil.verify(token, userid, user.getPassword());
+        } catch (UnsupportedEncodingException e) {
             throw new AuthenticationException("Username or password error");
+        } catch (SecurityException e2){
+            throw new AuthenticationException("Username or password error");
+        } catch (TokenExpiredException e3){
+            throw new AuthenticationException("Token expire");
         }
 
         return new SimpleAuthenticationInfo(user, token, getName());
