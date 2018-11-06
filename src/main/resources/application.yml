@@ -121,4 +121,4 @@ logging:
 
 cooky:
   # token 过期时间
-  tokenExpire: 10
+  tokenExpire: 60

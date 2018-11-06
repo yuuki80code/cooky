@@ -28,7 +28,7 @@ public class TokenUtil {
      * @param secret 用户的密码
      * @return 是否正确
      */
-    public static boolean verify(String token, Long userid, String secret) throws UnsupportedEncodingException,SignatureVerificationException,TokenExpiredException {
+    public static boolean verify(String token, Long userid, String secret) throws UnsupportedEncodingException {
         Algorithm algorithm = Algorithm.HMAC256(secret);
         JWTVerifier verifier = JWT.require(algorithm)
                 .withClaim("userid", userid)
@@ -58,7 +58,7 @@ public class TokenUtil {
      */
     public static String sign(Long userid, String secret) {
         try {
-            Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME);
+            Date date = new Date(System.currentTimeMillis()+EXPIRE_TIME*1000);
             Algorithm algorithm = Algorithm.HMAC256(secret);
             // 附带username信息
             return JWT.create()

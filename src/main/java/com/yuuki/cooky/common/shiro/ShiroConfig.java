@@ -50,6 +50,7 @@ public class ShiroConfig {
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
         // 所有请求通过我们自己的JWT Filter
         filterRuleMap.put("/login", "anon");
+        filterRuleMap.put("/refresh/**", "anon");
         filterRuleMap.put("/**", "oauth2");
 
 

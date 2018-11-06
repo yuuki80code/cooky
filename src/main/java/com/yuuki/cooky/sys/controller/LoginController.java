@@ -25,22 +25,15 @@ public class LoginController extends BaseController {
     @Autowired
     UserService userService;
 
+
     @PostMapping("/login")
     public ResponseVo login(String username, String password){
-
-
         return userService.login(username, password);
     }
 
     @PostMapping("/refresh/{token}")
     public ResponseVo refresh(@PathVariable("token")String token) {
-//        SysUser user = getUser();
-//        String token = TokenUtil.sign(user.getUserId(), user.getPassword());
-        Long usernId = TokenUtil.getUsernId(token);
-        if (usernId!=null){
-//            TokenUtil.sign()
-        }
-        return ResponseVo.ok("refresh success",token);
+        return userService.refreshToken(token);
     }
 
 

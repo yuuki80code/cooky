@@ -20,9 +20,9 @@ public class TokenTest {
 
     @Test
     public void expireToken() throws UnsupportedEncodingException {
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE0MjY0NDksInVzZXJpZCI6MX0.QkmzzrAZq1isKe2x0fgZYyBF96xc1j0ADM0_7Jto3Uk";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDE1MTIxMDIsInVzZXJpZCI6Mn0.yA6pDRgj8lkV85DaB7Em_0JaJW8OexGpOEiI6ZhBdiU";
 
-        System.out.println(TokenUtil.verify(token,1l,"12356"));
+        System.out.println(TokenUtil.verify(token,2l,"a758268ef5963c80eed5ce4a831b5277"));
     }
 
 }

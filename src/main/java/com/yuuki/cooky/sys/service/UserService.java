@@ -11,6 +11,8 @@ public interface UserService extends IService<SysUser> {
 
     ResponseVo login(String username,String password);
 
+    ResponseVo refreshToken(String token);
+
     SysUser findByName(String userName);
 
     List<SysUser> findUserMsg(SysUser user);

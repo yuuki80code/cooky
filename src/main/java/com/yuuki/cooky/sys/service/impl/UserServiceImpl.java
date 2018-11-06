@@ -15,11 +15,14 @@ import com.yuuki.cooky.sys.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -33,6 +36,12 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
 
     @Autowired
     private SysUserRoleMapper userRoleMapper;
+
+    @Value("${cooky.tokenExpire}")
+    Long tokenExpire;
+
+    @Autowired
+    StringRedisTemplate stringRedisTemplate;
 
 
     @Override
@@ -52,11 +61,29 @@ public class UserServiceImpl extends BaseService<SysUser> implements UserService
             return ResponseVo.error("账号已锁定");
         }
         log.error("userid: {}",sysUser.getUserId());
+        //缓存token
         String token = TokenUtil.sign(sysUser.getUserId(), sysUser.getPassword());
+        stringRedisTemplate.opsForValue().set(token+"cache",sysUser.getUserId()+"",2*tokenExpire, TimeUnit.SECONDS);
         Map<String,Object> data = new HashMap<>();
         data.put("token",token);
         data.put("username",sysUser.getUsername());
         return ResponseVo.ok("登陆成功",data);
+    }
+
+    @Override
+    public ResponseVo refreshToken(String token) {
+        if (stringRedisTemplate.hasKey(token + "cache")) {
+            Long id = Long.parseLong(stringRedisTemplate.opsForValue().get(token + "cache"));
+            SysUser user = selectByKey(id);
+            if(user!=null){
+                String newToken = TokenUtil.sign(user.getUserId(), user.getPassword());
+                stringRedisTemplate.delete(token+"cache");
+                stringRedisTemplate.opsForValue().set(newToken+"cache",user.getUserId()+"",2*tokenExpire,TimeUnit.SECONDS);
+                return ResponseVo.ok("refresh success",newToken);
+            }
+        }
+
+        return ResponseVo.error("过期太久...");
     }
 
     @Override
